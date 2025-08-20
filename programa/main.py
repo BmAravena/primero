@@ -108,20 +108,39 @@ class Juego:
     
     def main(self, tablero):
         fLag = True
+        turno = True
+
         while fLag:
-            tablero.muestraTablero()
-            x = int(input("Ingresa posición en x: "))
-            y = int(input("Ingresa posición en y: "))
-            tablero.colocaSigno(x, y, self.primer_jugador.getSigno())
+            if turno:
+                print("Turno del primer jugador")
+                signo = self.primer_jugador.getSigno()
+            else:
+                print("Turno del segundo jugador")
+                signo = self.segundo_jugador.getSigno()
 
-            if x == "":
-                fLag = False
-
-            if tablero.verificaGanador(self.primer_jugador.getSigno()):
-                print("Hay ganador!")
+            try:
+                x = int(input("Ingresa posición en x: "))
+                y = int(input("Ingresa posición en y: "))
+                tablero.colocaSigno(x, y, signo)
                 tablero.muestraTablero()
+                
+            except Exception as e:
+                print(f"ERROR: {e}")
+
+
+            if tablero.verificaGanador(signo):
+                tablero.muestraTablero()
+                if signo == self.primer_jugador.getSigno():
+                    print("Hay ganador!, el primer jugador")
+                    self.primer_jugador.informacion()
+                else:
+                    print("Hay ganador!, el segundo jugador")
+                    self.segundo_jugador.informacion()
+
                 fLag = False
 
+
+            turno = not turno
 
 
 s1 = Signo('x')
